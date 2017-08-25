@@ -21,13 +21,14 @@ public class RecieveThread extends Thread {
 			String receivedString = null;
 			// log_file
 			FileWriter fw = null;
-			fw = new FileWriter("F:\\users\\smk7758\\Desktop\\log_client.txt", true);
+			if (System.getProperty("user.name").equals("smk7758")) fw = new FileWriter("F:\\users\\smk7758\\Desktop\\log_client.txt", true);
+			else fw = new FileWriter(System.getProperty("user.home") + "\\Desktop\\log_client.txt", true);
 			// log_file
-			do {
-				receivedString = bisr.readLine();
-				fw.write(receivedString);
+			while ((receivedString = bisr.readLine()) != null && Main.getThread()) {
+				fw.write(receivedString + "\r\n");
 				System.out.println(receivedString);
-			} while (Main.getThread() || (receivedString != null));
+			}
+			System.out.println("切断されました。");
 			fw.flush();
 			fw.close();
 		} catch (IOException e) {
