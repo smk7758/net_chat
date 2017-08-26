@@ -13,21 +13,18 @@ public class RecieveThread extends Thread {
 	}
 
 	// Recieve
+	@Override
 	public void run() {
 		BufferedReader bisr = new BufferedReader(new InputStreamReader(is));
 		String receivedString = null;
-//		FileWriter fw = Main.getLogFile();
 		try {
-			while ((receivedString = bisr.readLine()) != null && Main.thread) {
+			while ((receivedString = bisr.readLine()) != null && Main.loop_sub) {
 				System.out.println(receivedString);
-//				if (fw != null) {
-//					fw.write(receivedString + "\r\n");
-//				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Main.thread = false;
+		Main.loop_sub = false;
 		System.out.println("Stop recieve loop.");
 		System.out.println("切断されました。");
 	}
