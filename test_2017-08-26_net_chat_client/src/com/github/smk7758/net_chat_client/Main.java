@@ -9,26 +9,26 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 
 public class Main {
-	public static Boolean thread = true;
+	public static boolean thread = true; // ループ処理についてのもの
 
 	public static void main(String[] args) {
-		try (Socket socket = new Socket("127.0.0.1", 25565)) {
-			InputStream is = socket.getInputStream();
-			OutputStream os = socket.getOutputStream();
+		System.out.println("Start client!");
+		RecieveThread rt = null;
+		try (Socket socket = new Socket("127.0.0.1", 25565); InputStream is = socket.getInputStream();
+				OutputStream os = socket.getOutputStream();) {
 			// start RecieveThread.
-			RecieveThread rt = new RecieveThread(is);
+			rt = new RecieveThread(is);
 			rt.start();
 			// Send
 			sender(os);
-			// stop RecieveThread.
-			thread = false;
-			rt.interrupt();
-			os.close();
-			is.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			// stop RecieveThread.
+			thread = false;
+			if (rt != null) rt.interrupt();
 		}
-		System.out.println("Stop!");
+		System.out.println("Stop client!");
 	}
 
 	public static void sender(OutputStream os) throws IOException {
@@ -36,10 +36,10 @@ public class Main {
 		String input_string = null;
 		BufferedReader sbir = new BufferedReader(new InputStreamReader(System.in));
 		do {
-				input_string = sbir.readLine();
-				osw.write(input_string);
-				osw.write("\r\n");
-				osw.flush();
+			input_string = sbir.readLine();
+			osw.write(input_string);
+			osw.write("\r\n");
+			osw.flush();
 		} while (!input_string.equals("XX") || thread == false);
 	}
 }
