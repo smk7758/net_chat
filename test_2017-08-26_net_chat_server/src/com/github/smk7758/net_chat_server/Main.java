@@ -10,7 +10,7 @@ public class Main {
 	public static volatile boolean loop_sub = true;
 	public static volatile boolean loop_main = true;
 	public OutputStream os = null;
-	public static RecieveThread rt = null;
+	public static ReceiveThread rt = null;
 	public static ConsoleThread ct = null;
 
 	public static void main(String[] args) {
@@ -34,7 +34,7 @@ public class Main {
 				ct.os = socket.getOutputStream();
 				System.out.println("Adress from: " + socket.getInetAddress());
 				// start RecieveThread.
-				rt = new RecieveThread();
+				rt = new ReceiveThread();
 				rt.is = socket.getInputStream();
 				rt.start();
 				System.out.println("In Main Loop Last.");

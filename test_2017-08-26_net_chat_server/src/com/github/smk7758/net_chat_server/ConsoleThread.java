@@ -16,17 +16,19 @@ public class ConsoleThread extends Thread {
 			String input_string = null;
 			sbir = new BufferedReader(new InputStreamReader(System.in));
 			while (!Thread.currentThread().isInterrupted() && Main.loop_sub) {
-//				if (sbir.ready()) {
-					if (os != null) {
-						input_string = sbir.readLine();
+				// if (sbir.ready()) {
+				if (os != null) {
+					input_string = sbir.readLine();
+					if (input_string != null) {
 						main.sender(os, input_string);
+						if (input_string.equals("XX")) {
+							Main.loop_sub = false;
+							Main.loop_main = false;
+							break;
+						}
 					}
-					if (input_string.equals("XX")) {
-						Main.loop_sub = false;
-						Main.loop_main = false;
-						break;
-					}
-//				}
+				}
+				// }
 			}
 			System.out.println("Stop send loop.");
 		} catch (IOException e) {
