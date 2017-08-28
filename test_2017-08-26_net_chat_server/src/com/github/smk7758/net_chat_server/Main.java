@@ -10,10 +10,14 @@ import java.net.Socket;
 public class Main {
 	public static boolean loop_sub = true;
 	public static boolean loop_main = true;
+	public OutputStream os = null;
+	public static RecieveThread rt = null;
+	public static ConsoleThread ct = null;
 
 	public static void main(String[] args) {
 		System.out.println("Start server!");
-		RecieveThread rt = null;
+//		RecieveThread rt = null;
+//		ConsoleThread ct = null;
 		ServerSocket server_socket = null;
 		Socket socket = null;
 		InputStream is = null;
@@ -35,8 +39,8 @@ public class Main {
 				// start RecieveThread.
 				rt = new RecieveThread(is);
 				rt.start();
-				// Send
-				ConsoleThread ct = new ConsoleThread(os);
+				// start CT
+				ct = new ConsoleThread(os);
 				ct.start();
 				System.out.println("In Main Loop Last.");
 			} catch (IOException e) {
@@ -57,7 +61,7 @@ public class Main {
 		System.out.println("Stop server!");
 	}
 
-	public static void sender(OutputStream os, String input_string) throws IOException {
+	public void sender(OutputStream os, String input_string) throws IOException {
 		OutputStreamWriter osw = new OutputStreamWriter(os);
 		osw.write(input_string + "\r\n");
 		osw.flush();
@@ -68,6 +72,9 @@ public class Main {
 		}
 	}
 
+//	public OutputStream getOutputStream() {
+//		return os;
+//	}
 	// public static FileWriter getLogFile() {
 	// String log_file_path = null;
 	// if (System.getProperty("user.name").equals("smk7758")) log_file_path = "F:\\users\\smk7758\\Desktop\\log_client.txt"; // ユーザー名がsmk7758の時

@@ -6,7 +6,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 public class ConsoleThread extends Thread {
+	Main main = new Main();
 	OutputStream os = null;
+	BufferedReader sbir = null;
 
 	public ConsoleThread(OutputStream os) {
 		this.os = os;
@@ -16,11 +18,27 @@ public class ConsoleThread extends Thread {
 	public void run() {
 		try {
 			String input_string = null;
-			BufferedReader sbir = new BufferedReader(new InputStreamReader(System.in));
-			while (Main.loop_sub && !(input_string = sbir.readLine()).equals("XX")) {// コンソール待ち
-				Main.sender(os, input_string);
+			sbir = new BufferedReader(new InputStreamReader(System.in));
+			while (!Thread.currentThread().isInterrupted() && Main.loop_sub) {
+//				if (sbir.ready()) {
+					input_string = sbir.readLine();
+					main.sender(os, input_string);
+					if (input_string.equals("XX")) {
+						Main.loop_sub = false;
+						Main.loop_main = false;
+						break;
+					}
+//				}
 			}
 			System.out.println("Stop send loop.");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void close() {
+		try {
+			sbir.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -18,14 +18,15 @@ public class RecieveThread extends Thread {
 		BufferedReader bisr = new BufferedReader(new InputStreamReader(is));
 		String receivedString = null;
 		try {
-			while ((receivedString = bisr.readLine()) != null && Main.loop_sub) {
+			while (!Thread.currentThread().isInterrupted() && Main.loop_sub && (receivedString = bisr.readLine()) != null) {
 				System.out.println(receivedString);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Main.loop_sub = false;
 		System.out.println("Stop recieve loop.");
+		Main.ct.close();
+		Main.loop_sub = false;
 		System.out.println("切断されました。");
 	}
 }
