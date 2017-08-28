@@ -1,7 +1,6 @@
 package com.github.smk7758.net_chat_server;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
@@ -16,12 +15,11 @@ public class Main {
 
 	public static void main(String[] args) {
 		System.out.println("Start server!");
-//		RecieveThread rt = null;
-//		ConsoleThread ct = null;
 		ServerSocket server_socket = null;
 		Socket socket = null;
-		InputStream is = null;
-		OutputStream os = null;
+		// start CT
+		ct = new ConsoleThread();
+		ct.start();
 		try {
 			server_socket = new ServerSocket(25565);
 		} catch (IOException e) {
@@ -33,15 +31,12 @@ public class Main {
 			loop_sub = true;
 			try {
 				socket = server_socket.accept(); // 接続待ち
-				is = socket.getInputStream();
-				os = socket.getOutputStream();
+				ct.os = socket.getOutputStream();
 				System.out.println("Adress from: " + socket.getInetAddress());
 				// start RecieveThread.
-				rt = new RecieveThread(is);
+				rt = new RecieveThread();
+				rt.is = socket.getInputStream();
 				rt.start();
-				// start CT
-				ct = new ConsoleThread(os);
-				ct.start();
 				System.out.println("In Main Loop Last.");
 			} catch (IOException e) {
 				e.printStackTrace();

@@ -7,12 +7,8 @@ import java.io.OutputStream;
 
 public class ConsoleThread extends Thread {
 	Main main = new Main();
-	OutputStream os = null;
+	public volatile OutputStream os = null;
 	BufferedReader sbir = null;
-
-	public ConsoleThread(OutputStream os) {
-		this.os = os;
-	}
 
 	@Override
 	public void run() {
@@ -21,9 +17,10 @@ public class ConsoleThread extends Thread {
 			sbir = new BufferedReader(new InputStreamReader(System.in));
 			while (!Thread.currentThread().isInterrupted() && Main.loop_sub) {
 //				if (sbir.ready()) {
-				if (sbir == null) sbir = new BufferedReader(new InputStreamReader(System.in));
-					input_string = sbir.readLine();
-					main.sender(os, input_string);
+					if (os != null) {
+						input_string = sbir.readLine();
+						main.sender(os, input_string);
+					}
 					if (input_string.equals("XX")) {
 						Main.loop_sub = false;
 						Main.loop_main = false;

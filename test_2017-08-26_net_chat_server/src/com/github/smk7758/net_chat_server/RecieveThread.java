@@ -6,11 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class RecieveThread extends Thread {
-	InputStream is = null;
-
-	public RecieveThread(InputStream is) {
-		this.is = is;
-	}
+	public volatile InputStream is = null;
 
 	// Recieve
 	@Override
@@ -25,7 +21,7 @@ public class RecieveThread extends Thread {
 			e.printStackTrace();
 		}
 		System.out.println("Stop recieve loop.");
-		Main.ct.close();
+		Main.ct.os = null;
 		Main.loop_sub = false;
 		System.out.println("切断されました。");
 	}
