@@ -21,6 +21,7 @@ public class ConsoleThread extends Thread {
 			sbir = new BufferedReader(new InputStreamReader(System.in));
 			while (!Thread.currentThread().isInterrupted() && Main.loop_sub) {
 //				if (sbir.ready()) {
+				if (sbir == null) sbir = new BufferedReader(new InputStreamReader(System.in));
 					input_string = sbir.readLine();
 					main.sender(os, input_string);
 					if (input_string.equals("XX")) {

@@ -8,8 +8,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Main {
-	public static boolean loop_sub = true;
-	public static boolean loop_main = true;
+	public static volatile boolean loop_sub = true;
+	public static volatile boolean loop_main = true;
 	public OutputStream os = null;
 	public static RecieveThread rt = null;
 	public static ConsoleThread ct = null;
